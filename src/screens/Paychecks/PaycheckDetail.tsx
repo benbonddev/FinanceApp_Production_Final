@@ -232,8 +232,8 @@ const PaycheckDetail: React.FC = () => {
       </ScrollView>
       
       <BottomSheetModal
-        visible={deleteModalVisible}
-        onDismiss={() => setDeleteModalVisible(false)}
+        isOpen={deleteModalVisible}
+        onClose={() => setDeleteModalVisible(false)}
         title="Delete Paycheck"
         content="Are you sure you want to delete this paycheck? This action cannot be undone."
         actions={[
