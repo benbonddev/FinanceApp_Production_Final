@@ -13,8 +13,8 @@
     "build:ios": "eas build -p ios",
     "build:web": "npx expo export:web",
     "test": "jest",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint .",
+    "lint:fix": "ESLINT_USE_FLAT_CONFIG=false eslint . --fix",
     "clean": "rm -rf node_modules && npm install",
     "postinstall": "npx pod-install"
   },
