@@ -1,0 +1,17 @@
+declare module 'react';
+declare module 'react-native';
+declare module 'react-native-paper';
+declare module '@react-navigation/native';
+declare module '@react-navigation/stack';
+declare module '@react-navigation/bottom-tabs';
+declare module '@react-navigation/material-top-tabs';
+declare module '@reduxjs/toolkit';
+declare module 'react-redux';
+declare module 'victory-native';
+declare module 'date-fns';
+declare module '@react-native-async-storage/async-storage';
+declare module '@react-native-community/datetimepicker';
+declare module 'react-native-modal';
+declare module 'react-native-vector-icons';
+declare module 'react-native-svg';
+declare module 'uuid';
