@@ -102,6 +102,7 @@ export const saveThemePreference = async (theme: string): Promise<void> => {
     await saveData(STORAGE_KEYS.THEME, theme);
   } catch (error) {
     logger.error('Error saving theme preference:', error);
+    throw error;
   }
 };
 
@@ -119,6 +120,7 @@ export const saveBillsData = async (bills: Bill[]): Promise<void> => {
     await saveData(STORAGE_KEYS.BILLS, bills);
   } catch (error) {
     logger.error('Error saving bills data:', error);
+    throw error;
   }
 };
 
@@ -136,6 +138,7 @@ export const savePaychecksData = async (paychecks: Paycheck[]): Promise<void> =>
     await saveData(STORAGE_KEYS.PAYCHECKS, paychecks);
   } catch (error) {
     logger.error('Error saving paychecks data:', error);
+    throw error;
   }
 };
 
@@ -153,6 +156,7 @@ export const saveBudgetData = async (budget: Budget[]): Promise<void> => {
     await saveData(STORAGE_KEYS.BUDGETS, budget);
   } catch (error) {
     logger.error('Error saving budget data:', error);
+    throw error;
   }
 };
 
@@ -170,6 +174,7 @@ export const saveDebtData = async (debt: Debt[]): Promise<void> => {
     await saveData(STORAGE_KEYS.DEBTS, debt);
   } catch (error) {
     logger.error('Error saving debt data:', error);
+    throw error;
   }
 };
 
@@ -187,6 +192,7 @@ export const saveGoalsData = async (goals: Goal[]): Promise<void> => {
     await saveData(STORAGE_KEYS.GOALS, goals);
   } catch (error) {
     logger.error('Error saving goals data:', error);
+    throw error;
   }
 };
 

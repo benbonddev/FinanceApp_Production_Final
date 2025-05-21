@@ -1,7 +1,9 @@
-import React from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import BottomSheetModal from '../Modal/BottomSheetModal';
+import ListItem from '../List/ListItem';
 
 interface DropdownOption {
   label: string;
@@ -30,54 +32,74 @@ const Dropdown: React.FC<DropdownProps> = ({
   onPress,
 }) => {
   const theme = useTheme();
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   // Find the selected option
   const selectedOption = options.find(option => option.value === value);
 
   // Handle press - either use the provided onPress or implement default behavior
   const handlePress = () => {
-    if (onPress) {
+    if (onPress && (!options || options.length === 0)) {
       onPress();
-    } else {
-      // Default behavior would be implemented here
-      // For a real implementation, we would show a modal with options
-      // In production, we'll use a no-op as placeholder
-      options.length > 0 && onSelect(options[0]);
+    } else if (options && options.length > 0) {
+      setIsModalVisible(true);
     }
   };
 
+  const handleOptionSelect = (option: DropdownOption) => {
+    onSelect(option);
+    setIsModalVisible(false);
+  };
+
   return (
-    <View style={[styles.container, containerStyle]}>
-      {label && <Text style={[styles.label, { color: theme.colors.text }]}>{label}</Text>}
-      <TouchableOpacity
-        onPress={handlePress}
-        style={[
-          styles.inputContainer,
-          {
-            borderColor: error ? theme.colors.error : theme.colors.disabled,
-            backgroundColor: theme.dark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
-          },
-        ]}
-      >
-        <Text 
+    <>
+      <View style={[styles.container, containerStyle]}>
+        {label && <Text style={[styles.label, { color: theme.colors.text }]}>{label}</Text>}
+        <TouchableOpacity
+          onPress={handlePress}
           style={[
-            styles.valueText, 
-            { 
-              color: selectedOption ? theme.colors.text : theme.colors.placeholder 
-            }
+            styles.inputContainer,
+            {
+              borderColor: error ? theme.colors.error : theme.colors.disabled,
+              backgroundColor: theme.dark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
+            },
           ]}
         >
-          {selectedOption ? selectedOption.label : placeholder}
-        </Text>
-        <MaterialCommunityIcons
-          name="chevron-down"
-          size={20}
-          color={theme.colors.text}
-          style={styles.icon}
-        />
-      </TouchableOpacity>
-      {error && <Text style={[styles.error, { color: theme.colors.error }]}>{error}</Text>}
-    </View>
+          <Text
+            style={[
+              styles.valueText,
+              {
+                color: selectedOption ? theme.colors.text : theme.colors.placeholder,
+              },
+            ]}
+          >
+            {selectedOption ? selectedOption.label : placeholder}
+          </Text>
+          <MaterialCommunityIcons
+            name="chevron-down"
+            size={20}
+            color={theme.colors.text}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+        {error && <Text style={[styles.error, { color: theme.colors.error }]}>{error}</Text>}
+      </View>
+      <BottomSheetModal
+        isOpen={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        title={label || 'Select an Option'}
+      >
+        <ScrollView>
+          {options.map(option => (
+            <ListItem
+              key={option.value}
+              title={option.label}
+              onPress={() => handleOptionSelect(option)}
+            />
+          ))}
+        </ScrollView>
+      </BottomSheetModal>
+    </>
   );
 };
 
