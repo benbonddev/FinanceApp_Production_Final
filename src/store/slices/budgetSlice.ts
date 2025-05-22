@@ -3,6 +3,7 @@ import { RootState } from '../index';
 import { Budget } from '../../types';
 import { saveData, loadData, STORAGE_KEYS } from '../../utils/storage';
 import { logger } from '../../utils/logger';
+import { v4 as uuidv4 } from 'react-native-uuid';
 
 // Sample budgets for development
 const initialBudgets: Budget[] = [
@@ -41,14 +42,23 @@ export const loadBudgetsAsync = createAsyncThunk<Budget[], void, { rejectValue: 
   }
 );
 
-export const addBudgetAsync = createAsyncThunk<Budget, Budget, { state: RootState; rejectValue: string }>(
+// Type for budget data before ID is assigned
+type NewBudgetData = Omit<Budget, 'id'>;
+
+export const addBudgetAsync = createAsyncThunk<Budget, NewBudgetData, { state: RootState; rejectValue: string }>(
   'budgets/addBudget',
-  async (newBudget, thunkAPI) => {
+  async (budgetData, thunkAPI) => {
     try {
+      const budgetWithId: Budget = {
+        ...budgetData,
+        id: uuidv4() as string,
+        // Initialize other fields like 'spent' if they are not part of NewBudgetData
+        spent: budgetData.spent !== undefined ? budgetData.spent : 0,
+      };
       const currentBudgets = thunkAPI.getState().budgets.budgets;
-      const newBudgetsArray = [...currentBudgets, newBudget];
+      const newBudgetsArray = [...currentBudgets, budgetWithId];
       await saveData(STORAGE_KEYS.BUDGETS, newBudgetsArray);
-      return newBudget;
+      return budgetWithId;
     } catch (error: any) {
       logger.error('Failed to save new budget:', error);
       return thunkAPI.rejectWithValue(error.message || 'Failed to save new budget');

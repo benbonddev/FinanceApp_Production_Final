@@ -8,6 +8,9 @@ declare module 'react-native-paper' {
     border: string;
     outline: string;
     onSurfaceVariant: string;
+    accent: string;
+    notification: string;
+    info: string;
   }
 }
 
@@ -19,6 +22,9 @@ export interface CustomTheme extends MD3Theme {
     border: string;
     outline: string;
     onSurfaceVariant: string;
+    accent: string;
+    notification: string;
+    info: string;
   };
 }
 

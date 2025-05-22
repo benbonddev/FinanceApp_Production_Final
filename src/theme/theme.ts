@@ -73,6 +73,9 @@ const paperLightTheme: MD3Theme = {
     success: '#4CAF50',
     warning: '#FFC107',
     border: '#e0e0e0',
+    accent: '#03dac4',
+    notification: '#f50057',
+    info: '#2196F3',
   },
   roundness: 8,
   animation: {
@@ -123,6 +126,9 @@ const paperDarkTheme: MD3Theme = {
     success: '#4CAF50',
     warning: '#FFC107',
     border: '#2c2c2c',
+    accent: '#70efde', // Adjusted for dark theme
+    notification: '#ff80ab', // Adjusted for dark theme
+    info: '#64b5f6',
   },
   roundness: 8,
   animation: {
@@ -146,6 +152,7 @@ const fallbackLightTheme: CustomTheme = {
     success: '#4CAF50',
     warning: '#FFC107',
     notification: '#f50057',
+    info: '#2196F3', // Added info
     card: '#ffffff',
     border: '#e0e0e0',
     outline: '#757575',
@@ -171,7 +178,8 @@ const fallbackDarkTheme: CustomTheme = {
     error: '#CF6679',
     success: '#4CAF50',
     warning: '#FFC107',
-    notification: '#f50057',
+    notification: '#ff80ab', // Adjusted for dark theme
+    info: '#64b5f6', // Added info
     card: '#1e1e1e',
     border: '#2c2c2c',
     outline: '#9e9e9e',
@@ -198,7 +206,8 @@ export const lightTheme: CustomTheme = {
     error: '#B00020',
     success: '#4CAF50',
     warning: '#FFC107',
-    notification: '#f50057',
+    notification: '#f50057', // Sourced from paperLightTheme
+    info: '#2196F3', // Added info
     card: '#ffffff',
     border: '#e0e0e0',
     outline: '#757575',
@@ -225,7 +234,8 @@ export const darkTheme: CustomTheme = {
     error: '#CF6679',
     success: '#4CAF50',
     warning: '#FFC107',
-    notification: '#f50057',
+    notification: '#ff80ab', // Sourced from paperDarkTheme (adjusted)
+    info: '#64b5f6', // Added info
     card: '#1e1e1e',
     border: '#2c2c2c',
     outline: '#9e9e9e',

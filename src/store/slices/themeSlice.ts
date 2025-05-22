@@ -7,6 +7,7 @@ interface ThemeState {
   isDarkMode: boolean;
   notificationLevel: string;
   defaultView: string;
+  currency: string; // Added currency
   loading: boolean;
   isSaving: boolean;
   error: string | null;
@@ -16,6 +17,7 @@ const initialState: ThemeState = {
   isDarkMode: false,
   notificationLevel: 'normal',
   defaultView: 'month',
+  currency: 'USD', // Default currency
   loading: false,
   isSaving: false,
   error: null,
@@ -101,6 +103,7 @@ export const themeSlice = createSlice({
         state.isDarkMode = action.payload.isDarkMode;
         state.notificationLevel = action.payload.notificationLevel;
         state.defaultView = action.payload.defaultView;
+        state.currency = action.payload.currency; // Load currency
         state.loading = false;
       })
       .addCase(loadThemeAsync.rejected, (state, action) => {
@@ -119,6 +122,7 @@ export const themeSlice = createSlice({
         state.isDarkMode = action.payload.isDarkMode;
         state.notificationLevel = action.payload.notificationLevel;
         state.defaultView = action.payload.defaultView;
+        state.currency = action.payload.currency; // Save currency
         state.isSaving = false;
       })
       .addCase(saveThemeAsync.rejected, (state, action) => {

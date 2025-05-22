@@ -3,6 +3,7 @@ import { RootState } from '../index';
 import { Debt } from '../../types';
 import { saveData, loadData, STORAGE_KEYS } from '../../utils/storage';
 import { logger } from '../../utils/logger';
+import { v4 as uuidv4 } from 'react-native-uuid';
 
 // Sample debts for development
 const initialDebts: Debt[] = [
@@ -53,14 +54,18 @@ export const loadDebtsAsync = createAsyncThunk<
   }
 );
 
-export const addDebtAsync = createAsyncThunk<Debt, Debt, { state: RootState; rejectValue: string }>(
+// Type for debt data before ID is assigned
+type NewDebtData = Omit<Debt, 'id'>;
+
+export const addDebtAsync = createAsyncThunk<Debt, NewDebtData, { state: RootState; rejectValue: string }>(
   'debts/addDebt',
-  async (newDebt, thunkAPI) => {
+  async (debtData, thunkAPI) => {
     try {
+      const debtWithId: Debt = { ...debtData, id: uuidv4() as string };
       const currentDebts = thunkAPI.getState().debts.debts;
-      const newDebtsArray = [...currentDebts, newDebt];
+      const newDebtsArray = [...currentDebts, debtWithId];
       await saveData(STORAGE_KEYS.DEBTS, newDebtsArray);
-      return newDebt;
+      return debtWithId;
     } catch (error: any) {
       logger.error('Failed to save new debt:', error);
       return thunkAPI.rejectWithValue(error.message || 'Failed to save new debt');

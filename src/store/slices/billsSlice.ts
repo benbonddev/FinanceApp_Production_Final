@@ -3,6 +3,10 @@ import { getBillsData, saveBillsData } from '../../utils/storage';
 import { Bill } from '../../types';
 import { logger } from '../../utils/logger';
 import { RootState } from '../index'; // Import RootState for thunkAPI.getState()
+import { v4 as uuidv4 } from 'react-native-uuid';
+
+// Type for bill data before ID is assigned
+type NewBillData = Omit<Bill, 'id'>;
 
 interface BillsState {
   bills: Bill[];
@@ -39,16 +43,17 @@ export const loadBillsAsync = createAsyncThunk<
 // Async thunk for adding a bill
 export const addBillAsync = createAsyncThunk<
   Bill, // Return type: the new bill
-  Bill, // Argument type: the bill to add
+  NewBillData, // Argument type: bill data without an ID
   { state: RootState; rejectValue: string }
 >(
   'bills/addBill',
-  async (newBill, thunkAPI) => {
+  async (billData, thunkAPI) => {
     try {
+      const billWithId: Bill = { ...billData, id: uuidv4() as string };
       const currentBills = thunkAPI.getState().bills.bills;
-      const newBillsArray = [...currentBills, newBill];
+      const newBillsArray = [...currentBills, billWithId];
       await saveBillsData(newBillsArray);
-      return newBill;
+      return billWithId;
     } catch (error: any) {
       logger.error('Failed to save bill:', error);
       return thunkAPI.rejectWithValue(error.message || 'Failed to save bill');

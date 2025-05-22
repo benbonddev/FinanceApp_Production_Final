@@ -3,6 +3,7 @@ import { getPaychecksData, savePaychecksData } from '../../utils/storage';
 import { Paycheck } from '../../types';
 import { logger } from '../../utils/logger';
 import { RootState } from '../index';
+import { v4 as uuidv4 } from 'react-native-uuid';
 
 interface PaychecksState {
   paychecks: Paycheck[];
@@ -32,14 +33,18 @@ export const loadPaychecksAsync = createAsyncThunk<Paycheck[], void, { rejectVal
   }
 );
 
-export const addPaycheckAsync = createAsyncThunk<Paycheck, Paycheck, { state: RootState; rejectValue: string }>(
+// Type for paycheck data before ID is assigned
+type NewPaycheckData = Omit<Paycheck, 'id'>;
+
+export const addPaycheckAsync = createAsyncThunk<Paycheck, NewPaycheckData, { state: RootState; rejectValue: string }>(
   'paychecks/addPaycheck',
-  async (newPaycheck, thunkAPI) => {
+  async (paycheckData, thunkAPI) => {
     try {
+      const paycheckWithId: Paycheck = { ...paycheckData, id: uuidv4() as string };
       const currentPaychecks = thunkAPI.getState().paychecks.paychecks;
-      const newPaychecksArray = [...currentPaychecks, newPaycheck];
+      const newPaychecksArray = [...currentPaychecks, paycheckWithId];
       await savePaychecksData(newPaychecksArray);
-      return newPaycheck;
+      return paycheckWithId;
     } catch (error: any) {
       logger.error('Failed to save paycheck:', error);
       return thunkAPI.rejectWithValue(error.message || 'Failed to save paycheck');

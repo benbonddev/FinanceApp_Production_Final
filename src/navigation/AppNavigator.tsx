@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Import navigators
 import HomeNavigator from './HomeNavigator';
+import BillsNavigator from './BillsNavigator'; // Added BillsNavigator
 import PaychecksNavigator from './PaychecksNavigator';
 import BudgetNavigator from './BudgetNavigator';
 import DebtNavigator from './DebtNavigator';
@@ -36,6 +37,15 @@ const AppNavigator: React.FC = () => {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Icon name="home" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Bills"
+        component={BillsNavigator}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="receipt" color={color} size={size} />
           ),
         }}
       />
@@ -84,15 +94,17 @@ const AppNavigator: React.FC = () => {
           ),
         }}
       />
-      <Tab.Screen
-        name="Test"
-        component={TestNavigator}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="test-tube" color={color} size={size} />
-          ),
-        }}
-      />
+      {__DEV__ && (
+        <Tab.Screen
+          name="Test"
+          component={TestNavigator}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Icon name="test-tube" color={color} size={size} />
+            ),
+          }}
+        />
+      )}
     </Tab.Navigator>
   );
 };

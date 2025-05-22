@@ -3,6 +3,7 @@ import { getGoalsData, saveGoalsData } from '../../utils/storage';
 import { Goal } from '../../types';
 import { logger } from '../../utils/logger';
 import { RootState } from '../index';
+import { v4 as uuidv4 } from 'react-native-uuid';
 
 interface GoalsState {
   goals: Goal[];
@@ -32,14 +33,24 @@ export const loadGoalsAsync = createAsyncThunk<Goal[], void, { rejectValue: stri
   }
 );
 
-export const addGoalAsync = createAsyncThunk<Goal, Goal, { state: RootState; rejectValue: string }>(
+// Type for goal data before ID is assigned
+type NewGoalData = Omit<Goal, 'id'>;
+
+export const addGoalAsync = createAsyncThunk<Goal, NewGoalData, { state: RootState; rejectValue: string }>(
   'goals/addGoal',
-  async (newGoal, thunkAPI) => {
+  async (goalData, thunkAPI) => {
     try {
+      const goalWithId: Goal = {
+        ...goalData,
+        id: uuidv4() as string,
+        // Initialize currentAmount and contributionHistory if not part of goalData or should be defaulted
+        currentAmount: goalData.currentAmount !== undefined ? goalData.currentAmount : 0,
+        contributionHistory: goalData.contributionHistory !== undefined ? goalData.contributionHistory : [],
+      };
       const currentGoals = thunkAPI.getState().goals.goals;
-      const newGoalsArray = [...currentGoals, newGoal];
+      const newGoalsArray = [...currentGoals, goalWithId];
       await saveGoalsData(newGoalsArray);
-      return newGoal;
+      return goalWithId;
     } catch (error: any) {
       logger.error('Failed to save goal:', error);
       return thunkAPI.rejectWithValue(error.message || 'Failed to save goal');

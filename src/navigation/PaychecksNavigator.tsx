@@ -38,21 +38,7 @@ const PaychecksNavigator: React.FC = () => {
         component={EditPaycheckScreen} 
         options={{ title: 'Edit Paycheck' }}
       />
-      <Stack.Screen 
-        name="BillDetail" 
-        component={BillDetailScreen} 
-        options={{ title: 'Bill Details' }}
-      />
-      <Stack.Screen 
-        name="AddBill" 
-        component={AddBillScreen} 
-        options={{ title: 'Add Bill' }}
-      />
-      <Stack.Screen 
-        name="EditBill" 
-        component={EditBillScreen} 
-        options={{ title: 'Edit Bill' }}
-      />
+      {/* Bill related screens are now managed by BillsNavigator */}
     </Stack.Navigator>
   );
 };
